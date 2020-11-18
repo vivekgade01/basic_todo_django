@@ -1,14 +1,27 @@
-{% extends 'base.html' %}
-
-
-
+{% extends "base.html" %} 
 {% block content %}
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        
-    </ul>
+    <div class="row mt-4">
+        <div class="col">
+            <h2>Add Item</h2>
+        <form action="{% url 'my_app:todo' %}" method="post" class="form-inline">
+            <input type="text" required name="content" class="form-control mb-2 mr-sm-2" placeholder="type here...">
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        </form>
+    </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <ul class="list-group">
+                {% for todo_item in task_list %}
+                    <li class="list-group-item">{{ todo_item.task }}
+                        <div class="float-right">
+                            <form action="{% url 'my_app:delete_todo' todo_item.id %}" action="post">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    <div>
 {% endblock content %}
-    
-
-
-    

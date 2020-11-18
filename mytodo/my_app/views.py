@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Todo
 from django.utils import timezone
+from . import urls
 # Create your views here.
 
 
@@ -13,12 +15,17 @@ def home(request):
         'task_list' : task_list,
     }
 
-    return render(request,'base.html', context)
+    return render(request,'my_app/index.html', context)
+
 
 @csrf_exempt
 def add_todo(request):
-    task_text = request.POST.get('task_text')
     current_date = timezone.now()
-    task = Todo.objects.create(task = task_text,created=current_date)
-    task.save()
-    return HttpResponseRedirect("/")
+    content = request.POST.get('content')
+    created_obj = Todo.objects.create(task=content, created=current_date)
+    return HttpResponseRedirect(reverse('my_app:home'))
+
+@csrf_exempt
+def delete_todo(request,task_id):
+    Todo.objects.get(id = task_id).delete()
+    return HttpResponseRedirect(reverse('my_app:home'))
